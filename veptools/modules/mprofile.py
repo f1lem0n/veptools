@@ -21,19 +21,19 @@ COLNAMES = [
 
 def assign_variables(args):
     inp = args.i
-    out = args.o
+    out = args.o[0]
     binary = args.binary
 
     if args.g:
         genes = args.g
     else:
-        with open(args.G) as f:
+        with open(args.G[0]) as f:
             genes = f.read().splitlines()
 
     if args.s:
         samples = args.s
     elif args.S:
-        with open(args.S) as f:
+        with open(args.S[0]) as f:
             samples = f.read().splitlines()
     else:
         samples = None

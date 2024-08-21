@@ -1,6 +1,5 @@
 import argparse
 import sys
-from pathlib import Path
 
 from veptools.modules import mprofile
 
@@ -39,7 +38,6 @@ def get_parser():
     mprofile_parser.add_argument(
         "-o",
         metavar="<output>",
-        type=Path,
         nargs=1,
         help="path to output file",
         required=True,
@@ -55,7 +53,6 @@ def get_parser():
     group.add_argument(
         "-G",
         metavar="<gene_list_path>",
-        type=Path,
         nargs=1,
         help="path to gene list file where each gene is in new line",
     )
@@ -70,7 +67,6 @@ def get_parser():
     group.add_argument(
         "-S",
         metavar="<sample_list_path>",
-        type=Path,
         nargs=1,
         help="path to sample name list file where each name is in new line",
     )
