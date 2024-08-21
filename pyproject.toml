@@ -1,0 +1,31 @@
+[project]
+name = "veptools"
+dynamic = ["version"]
+authors = [
+    { name = "Filip Hajdyła", email = "hajdylaf@gmail.com" }
+]
+description = "Utility tools for VEP generated CSV files manipulation and analysis."
+readme = { file = "README.md", content-type = "text/markdown" }
+license = {file = "LICENSE"}
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+]
+dependencies = [
+    "numpy",
+    "pandas",
+]
+
+[project.urls]
+Homepage = "https://github.com/f1lem0n/veptools"
+Issues = "https://github.com/f1lem0n/veptools/issues"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+
+[project.scripts]
+veptools = "veptools.veptools:cli"
+
+[tool.setuptools]
+packages = ["veptools", "veptools.modules"]

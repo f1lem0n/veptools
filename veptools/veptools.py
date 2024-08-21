@@ -1,12 +1,13 @@
-from pathlib import Path
 import argparse
 import sys
+from pathlib import Path
 
-from modules import mprofile
+from veptools.modules import mprofile
+
 
 class CustomParser(argparse.ArgumentParser):
     def error(self, message):
-        sys.stderr.write('error: %s\n' % message)
+        sys.stderr.write("error: %s\n" % message)
         self.print_help()
         sys.exit(2)
 
@@ -21,20 +22,13 @@ def run_mprofile(args):
 def get_parser():
 
     # main parser
-    parser = CustomParser(
-        prog="veptools",
-        description=""
-    )
+    parser = CustomParser(prog="veptools", description="")
     subparsers = parser.add_subparsers(
         title="commands",
     )
 
-
     # mprofile
-    mprofile_parser = subparsers.add_parser(
-        "mprofile",
-        help=""
-    )
+    mprofile_parser = subparsers.add_parser("mprofile", help="")
     mprofile_parser.add_argument(
         "-i",
         metavar="<input>",
@@ -63,7 +57,7 @@ def get_parser():
         metavar="<gene_list_path>",
         type=Path,
         nargs=1,
-        help="path to gene list file where each gene is in new line"
+        help="path to gene list file where each gene is in new line",
     )
 
     group = mprofile_parser.add_mutually_exclusive_group(required=False)
@@ -87,20 +81,15 @@ def get_parser():
         action="store_true",
     )
 
-
     mprofile_parser.set_defaults(func=run_mprofile)
 
-
     # compare
-    subparsers.add_parser(
-        "compare",
-        help=""
-    )
+    subparsers.add_parser("compare", help="")
 
     return parser
 
 
-if __name__ == "__main__":
+def cli():
     parser = get_parser()
     args = parser.parse_args()
     try:
@@ -108,3 +97,6 @@ if __name__ == "__main__":
     except AttributeError:
         parser.print_help(sys.stderr)
 
+
+if __name__ == "__main__":
+    cli()
