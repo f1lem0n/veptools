@@ -12,9 +12,10 @@ class CustomParser(argparse.ArgumentParser):
 
 
 def run_mprofile(args):
-    mprofile.checkpoint(args)
-    profile = mprofile.calculate_profile(args)
-    mprofile.save_profile(args, profile)
+    inp, out, genes, samples, binary = mprofile.assign_variables(args)
+    mprofile.checkpoint(inp, samples)
+    profile = mprofile.calculate_profile(inp, genes, samples, binary)
+    mprofile.save_profile(samples, genes, profile, out)
 
 
 def get_parser():
@@ -38,14 +39,15 @@ def get_parser():
         "-i",
         metavar="<input>",
         nargs="+",
-        help="",
+        help="path to input file(s)",
         required=True,
     )
     mprofile_parser.add_argument(
         "-o",
         metavar="<output>",
+        type=Path,
         nargs=1,
-        help="",
+        help="path to output file",
         required=True,
     )
 
@@ -54,13 +56,14 @@ def get_parser():
         "-g",
         metavar="<gene>",
         nargs="+",
-        help="",
+        help="whitespace separated list of genes to consider in profile",
     )
     group.add_argument(
         "-G",
         metavar="<gene_list_path>",
+        type=Path,
         nargs=1,
-        help=""
+        help="path to gene list file where each gene is in new line"
     )
 
     group = mprofile_parser.add_mutually_exclusive_group(required=False)
@@ -68,14 +71,22 @@ def get_parser():
         "-s",
         metavar="<sample>",
         nargs="*",
-        help="",
+        help="whitespace separated list of sample names",
     )
     group.add_argument(
         "-S",
         metavar="<sample_list_path>",
+        type=Path,
         nargs=1,
-        help="",
+        help="path to sample name list file where each name is in new line",
     )
+
+    mprofile_parser.add_argument(
+        "--binary",
+        help="wether to calculate a binary profile",
+        action="store_true",
+    )
+
 
     mprofile_parser.set_defaults(func=run_mprofile)
 
