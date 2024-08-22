@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 
@@ -36,26 +38,18 @@ def assign_variables(args):
         with open(args.S[0]) as f:
             samples = f.read().splitlines()
     else:
-        samples = None
+        samples = inp
 
     return inp, out, genes, samples, binary
 
 
 def checkpoint(inp, samples):
-    if not samples:
-        return 0
-    assert len(inp) == len(
-        samples
-    ), "Number of samples must be equal to the number of input files"
+    assert len(inp) == len(samples), \
+    "Number of samples must be equal to the number of input files"
 
 
 def calculate_profile(inp, genes, samples, binary):
-
-    if not samples:
-        samples = inp
-
     profile = np.zeros((len(genes), len(samples)))
-
     for sample_idx, filepath in enumerate(inp):
         df = pd.read_table(filepath, sep="\t", names=COLNAMES)
         df = df[df["gene"].isin(genes)]
@@ -74,4 +68,6 @@ def save_profile(samples, genes, profile, out):
         columns=samples,
         index=genes,
     )
+    profile = profile.astype(int)
+    Path(out).parent.mkdir(parents=True, exist_ok=True)
     profile.to_csv(out)
