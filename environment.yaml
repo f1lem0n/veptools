@@ -63,12 +63,18 @@ dependencies:
   - pytz=2024.1
   - readline=8.2
   - rich=13.7.1
-  - setuptools=72.2.0
   - six=1.16.0
   - tk=8.6.13
   - tomli=2.0.1
+  - types-setuptools=72.2.0.20240821
   - typing_extensions=4.12.2
   - tzdata=2024a
   - wheel=0.44.0
   - xz=5.2.6
   - zipp=3.20.0
+  - pip:
+      - pandas-stubs==2.2.2.240807
+      - setuptools==73.0.1
+      - types-openpyxl==3.1.5.20240822
+      - types-pytz==2024.1.0.20240417
+prefix: /home/filip/.conda/envs/veptools
