@@ -27,6 +27,7 @@ test:
 		echo "COVERAGE REPORT:" && \
 		echo "" && \
 		coverage report -m;
+	@rm -rf tests/output
 
 format:
 	@echo "Sorting imports..."
@@ -44,11 +45,12 @@ clean:
 		__pycache__ \
 		veptools/__pycache__ \
 		veptools/modules/__pycache__ \
+		tests/output \
 		tests/__pycache__ \
-		tests/logs/ \
-		veptools-build/ \
-		veptools.egg-info/ \
-		dist/
+		tests/logs \
+		veptools-build \
+		veptools.egg-info \
+		dist
 
 checksum:
 	@echo "Generating repository checksum..."

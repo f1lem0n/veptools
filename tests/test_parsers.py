@@ -1,16 +1,26 @@
 from veptools.veptools import get_parser
 
+
 def test_mprofile_parser():
     parser = get_parser()
 
-    # -s -g 
+    # -s -g
     args = parser.parse_args(
         [
             "mprofile",
-            "-i", "tests/data/mprofile_input_A.tsv", "tests/data/mprofile_input_B.tsv",
-            "-o", "tests/output/mprofile_output.csv",
-            "-g", "ENSG00000254153", "ENSG00000228327", "ENSG00000291215", "ENSG00000131591",
-            "-s", "A", "B",
+            "-i",
+            "tests/data/mprofile_input_A.tsv",
+            "tests/data/mprofile_input_B.tsv",
+            "-o",
+            "tests/output/mprofile_output.csv",
+            "-g",
+            "ENSG00000254153",
+            "ENSG00000228327",
+            "ENSG00000291215",
+            "ENSG00000131591",
+            "-s",
+            "A",
+            "B",
         ]
     )
     assert args.i == [
@@ -35,11 +45,16 @@ def test_mprofile_parser():
     args = parser.parse_args(
         [
             "mprofile",
-            "-i", "tests/data/mprofile_input_A.tsv", "tests/data/mprofile_input_B.tsv",
-            "-o", "tests/output/mprofile_output.csv",
-            "-G", "tests/data/mprofile_genes.txt",
-            "-S", "tests/data/mprofile_samples.txt",
-            "--binary"
+            "-i",
+            "tests/data/mprofile_input_A.tsv",
+            "tests/data/mprofile_input_B.tsv",
+            "-o",
+            "tests/output/mprofile_output.csv",
+            "-G",
+            "tests/data/mprofile_genes.txt",
+            "-S",
+            "tests/data/mprofile_samples.txt",
+            "--binary",
         ]
     )
     assert args.i == [
@@ -49,12 +64,8 @@ def test_mprofile_parser():
     assert args.o == [
         "tests/output/mprofile_output.csv",
     ]
-    assert args.G == [
-        "tests/data/mprofile_genes.txt"
-    ]
-    assert args.S == [
-        "tests/data/mprofile_samples.txt"
-    ]
+    assert args.G == ["tests/data/mprofile_genes.txt"]
+    assert args.S == ["tests/data/mprofile_samples.txt"]
     assert args.g is None
     assert args.s is None
     assert args.binary is True
@@ -63,10 +74,14 @@ def test_mprofile_parser():
     args = parser.parse_args(
         [
             "mprofile",
-            "-i", "tests/data/mprofile_input_A.tsv", "tests/data/mprofile_input_B.tsv",
-            "-o", "tests/output/mprofile_output.csv",
-            "-G", "tests/data/mprofile_genes.txt",
-            "--binary"
+            "-i",
+            "tests/data/mprofile_input_A.tsv",
+            "tests/data/mprofile_input_B.tsv",
+            "-o",
+            "tests/output/mprofile_output.csv",
+            "-G",
+            "tests/data/mprofile_genes.txt",
+            "--binary",
         ]
     )
     assert args.i == [
@@ -76,11 +91,8 @@ def test_mprofile_parser():
     assert args.o == [
         "tests/output/mprofile_output.csv",
     ]
-    assert args.G == [
-        "tests/data/mprofile_genes.txt"
-    ]
+    assert args.G == ["tests/data/mprofile_genes.txt"]
     assert args.g is None
     assert args.s is None
     assert args.S is None
     assert args.binary is True
-

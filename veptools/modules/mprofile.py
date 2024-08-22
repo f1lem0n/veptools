@@ -44,8 +44,9 @@ def assign_variables(args):
 
 
 def checkpoint(inp, samples):
-    assert len(inp) == len(samples), \
-    "Number of samples must be equal to the number of input files"
+    assert len(inp) == len(
+        samples
+    ), "Number of samples must be equal to the number of input files"
 
 
 def calculate_profile(inp, genes, samples, binary):
