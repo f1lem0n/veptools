@@ -40,7 +40,7 @@ def assign_variables(args):
     out = args.o[0]
 
     with open(args.s[0]) as f:
-        sample_info = pd.read_csv(f)
+        sample_info = pd.read_csv(f, sep="\t", header=0)
 
     return inp, out, sample_info
 
