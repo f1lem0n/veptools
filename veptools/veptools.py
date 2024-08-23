@@ -1,7 +1,7 @@
 import argparse
 import sys
 
-from veptools.modules import mprofile
+from veptools.modules import aggregate, mprofile
 
 
 class CustomParser(argparse.ArgumentParser):
@@ -13,26 +13,60 @@ class CustomParser(argparse.ArgumentParser):
 
 def run_mprofile(args):
     inp, out, genes, samples, binary = mprofile.assign_variables(args)
-    mprofile.checkpoint(inp, samples)
     profile = mprofile.calculate_profile(inp, genes, samples, binary)
-    mprofile.save_profile(samples, genes, profile, out)
+    mprofile.save_profile(genes, samples, profile, out)
+
+
+def run_aggregate(args):
+    inp, out, sample_info = aggregate.assign_variables(args)
+    aggregate.checkpoint(inp, sample_info)
+    df = aggregate.get_aggregated_df(inp, sample_info)
+    df.to_csv(out, index=False)
 
 
 def get_parser():
 
     # main parser
     parser = CustomParser(prog="veptools", description="")
-    subparsers = parser.add_subparsers(
-        title="commands",
-    )
+    subparsers = parser.add_subparsers(title="commands")
 
-    # mprofile
-    mprofile_parser = subparsers.add_parser("mprofile", help="")
-    mprofile_parser.add_argument(
+    # aggregate
+    aggregate_parser = subparsers.add_parser(
+        "aggregate",
+        help="aggregate VEP results and sample info into a single table",
+    )
+    aggregate_parser.add_argument(
         "-i",
         metavar="<input>",
         nargs="+",
         help="path to input file(s)",
+        required=True,
+    )
+    aggregate_parser.add_argument(
+        "-o",
+        metavar="<output>",
+        nargs=1,
+        help="path to output file",
+        required=True,
+    )
+    aggregate_parser.add_argument(
+        "-s",
+        metavar="<sample_info_path>",
+        nargs=1,
+        help="path to comma separated sample info table",
+        required=True,
+    )
+    aggregate_parser.set_defaults(func=run_aggregate)
+
+    # mprofile
+    mprofile_parser = subparsers.add_parser(
+        "mprofile", help="calculate mutation profile"
+    )
+    mprofile_parser.add_argument(
+        "-i",
+        metavar="<input>",
+        nargs="+",
+        help="path to input file created via veptools aggregate",
         required=True,
     )
     mprofile_parser.add_argument(
@@ -42,7 +76,11 @@ def get_parser():
         help="path to output file",
         required=True,
     )
-
+    mprofile_parser.add_argument(
+        "--binary",
+        help="wether to calculate a binary profile",
+        action="store_true",
+    )
     group = mprofile_parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
         "-g",
@@ -56,31 +94,7 @@ def get_parser():
         nargs=1,
         help="path to gene list file where each gene is in new line",
     )
-
-    group = mprofile_parser.add_mutually_exclusive_group(required=False)
-    group.add_argument(
-        "-s",
-        metavar="<sample>",
-        nargs="*",
-        help="whitespace separated list of sample names",
-    )
-    group.add_argument(
-        "-S",
-        metavar="<sample_list_path>",
-        nargs=1,
-        help="path to sample name list file where each name is in new line",
-    )
-
-    mprofile_parser.add_argument(
-        "--binary",
-        help="wether to calculate a binary profile",
-        action="store_true",
-    )
-
     mprofile_parser.set_defaults(func=run_mprofile)
-
-    # compare
-    subparsers.add_parser("compare", help="")
 
     return parser
 
@@ -90,7 +104,8 @@ def cli():
     args = parser.parse_args()
     try:
         args.func(args)
-    except AttributeError:
+    except Exception as e:
+        print(e)
         parser.print_help(sys.stderr)
 
 

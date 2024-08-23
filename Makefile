@@ -27,7 +27,6 @@ test:
 		echo "COVERAGE REPORT:" && \
 		echo "" && \
 		coverage report -m;
-	@rm -rf tests/output
 
 format:
 	@echo "Sorting imports..."
@@ -67,7 +66,8 @@ checksum:
 		\! -path "./veptools-build/*" \
 		\! -path "./transfold.egg-info/*" \
 		\! -path "./dist/*" \
-		-exec md5sum {} \; | sort -k 2 | md5sum > md5
+		\! -path "./tests/output/*" \
+		-exec md5sum {} \; | sort -k 2 > md5
 	@echo "Checksum generated!"
 
 diff:
@@ -84,7 +84,8 @@ diff:
 		\! -path "./veptools-build/*" \
 		\! -path "./veptools.egg-info/*" \
 		\! -path "./dist/*" \
-		-exec md5sum {} \; | sort -k 2 | md5sum | diff - md5
+		\! -path "./tests/output/*" \
+		-exec md5sum {} \; | sort -k 2 | diff - md5
 	@echo "Checksums are equal!"
 
 install:
