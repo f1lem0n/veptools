@@ -5,7 +5,7 @@ import pandas as pd
 
 
 def assign_variables(args):
-    inp = pd.read_csv(args.i[0])
+    inp = pd.read_table(args.i[0], sep="\t")
     out = args.o[0]
     binary = args.binary
     samples = list(inp["sample_name"].unique())
@@ -52,4 +52,4 @@ def save_profile(genes, samples, profile, out):
         index=genes,
     )
     Path(out).parent.mkdir(parents=True, exist_ok=True)
-    profile.to_csv(out)
+    profile.to_csv(out, sep="\t")

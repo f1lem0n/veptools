@@ -20,14 +20,14 @@ def test_assign_variables():
             "tests/data/input_A.tsv",
             "tests/data/input_B.tsv",
             "-s",
-            "tests/data/sample_info.csv",
+            "tests/data/sample_info.tsv",
             "-o",
-            "tests/output/aggregate_output.csv",
+            "tests/output/aggregate_output.tsv",
         ]
     )
     inp, out, sample_info = assign_variables(args)
     assert inp == ["tests/data/input_A.tsv", "tests/data/input_B.tsv"]
-    assert out == "tests/output/aggregate_output.csv"
+    assert out == "tests/output/aggregate_output.tsv"
     assert (
         sample_info.values
         == pd.DataFrame(
@@ -65,9 +65,9 @@ def test_checkpoint():
             "tests/data/input_A.tsv",
             "tests/data/input_B.tsv",
             "-s",
-            "tests/data/sample_info.csv",
+            "tests/data/sample_info.tsv",
             "-o",
-            "tests/output/aggregate_output.csv",
+            "tests/output/aggregate_output.tsv",
         ]
     )
     inp, out, sample_info = assign_variables(args)
@@ -79,9 +79,9 @@ def test_checkpoint():
                 "-i",
                 "tests/data/input_A.tsv",
                 "-s",
-                "tests/data/sample_info.csv",
+                "tests/data/sample_info.tsv",
                 "-o",
-                "tests/output/aggregate_output.csv",
+                "tests/output/aggregate_output.tsv",
             ]
         )
         inp, out, sample_info = assign_variables(args)
@@ -96,9 +96,9 @@ def test_get_skel_df():
             "tests/data/input_A.tsv",
             "tests/data/input_B.tsv",
             "-s",
-            "tests/data/sample_info.csv",
+            "tests/data/sample_info.tsv",
             "-o",
-            "tests/output/aggregate_output.csv",
+            "tests/output/aggregate_output.tsv",
         ]
     )
     inp, out, sample_info = assign_variables(args)
@@ -131,9 +131,9 @@ def test_get_aggregated_df():
             "tests/data/input_A.tsv",
             "tests/data/input_B.tsv",
             "-s",
-            "tests/data/sample_info.csv",
+            "tests/data/sample_info.tsv",
             "-o",
-            "tests/output/aggregate_output.csv",
+            "tests/output/aggregate_output.tsv",
         ]
     )
     inp, out, sample_info = assign_variables(args)

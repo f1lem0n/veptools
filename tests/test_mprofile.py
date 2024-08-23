@@ -18,9 +18,9 @@ def test_assign_variables():
         [
             "mprofile",
             "-i",
-            "tests/data/aggregate_output.csv",
+            "tests/data/aggregate_output.tsv",
             "-o",
-            "tests/output/mprofile_output.csv",
+            "tests/output/mprofile_output.tsv",
             "-g",
             "ENSG00000187583",
             "ENSG00000254153",
@@ -30,7 +30,7 @@ def test_assign_variables():
     )
     inp, out, genes, samples, binary = assign_variables(args)
     assert inp.shape == (100, 16)
-    assert out == "tests/output/mprofile_output.csv"
+    assert out == "tests/output/mprofile_output.tsv"
     assert genes == [
         "ENSG00000187583",
         "ENSG00000254153",
@@ -45,9 +45,9 @@ def test_assign_variables():
         [
             "mprofile",
             "-i",
-            "tests/data/aggregate_output.csv",
+            "tests/data/aggregate_output.tsv",
             "-o",
-            "tests/output/mprofile_output.csv",
+            "tests/output/mprofile_output.tsv",
             "-G",
             "tests/data/gene_list.txt",
             "--binary",
@@ -55,7 +55,7 @@ def test_assign_variables():
     )
     inp, out, genes, samples, binary = assign_variables(args)
     assert inp.shape == (100, 16)
-    assert out == "tests/output/mprofile_output.csv"
+    assert out == "tests/output/mprofile_output.tsv"
     assert genes == [
         "ENSG00000187583",
         "ENSG00000254153",
@@ -73,9 +73,9 @@ def test_calculate_profile():
         [
             "mprofile",
             "-i",
-            "tests/data/aggregate_output.csv",
+            "tests/data/aggregate_output.tsv",
             "-o",
-            "tests/output/mprofile_output.csv",
+            "tests/output/mprofile_output.tsv",
             "-G",
             "tests/data/gene_list.txt",
             "--binary",
@@ -90,9 +90,9 @@ def test_calculate_profile():
         [
             "mprofile",
             "-i",
-            "tests/data/aggregate_output.csv",
+            "tests/data/aggregate_output.tsv",
             "-o",
-            "tests/output/mprofile_output.csv",
+            "tests/output/mprofile_output.tsv",
             "-G",
             "tests/data/gene_list.txt",
         ]
@@ -107,9 +107,9 @@ def test_save_profile():
         [
             "mprofile",
             "-i",
-            "tests/data/aggregate_output.csv",
+            "tests/data/aggregate_output.tsv",
             "-o",
-            "tests/output/mprofile_output.csv",
+            "tests/output/mprofile_output.tsv",
             "-G",
             "tests/data/gene_list.txt",
         ]
@@ -117,7 +117,9 @@ def test_save_profile():
     inp, out, genes, samples, binary = assign_variables(args)
     profile = calculate_profile(inp, genes, samples, binary)
     save_profile(genes, samples, profile, out)
-    df = pd.read_csv("tests/output/mprofile_output.csv", index_col=0)
+    df = pd.read_table(
+        "tests/output/mprofile_output.tsv", index_col=0, sep="\t"
+    )
     _df = pd.DataFrame(
         {"A": [3, 0, 0, 0], "B": [0, 0, 5, 7]},
         index=[
