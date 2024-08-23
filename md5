@@ -1,7 +1,7 @@
 d06294dd82dd7b6eca018c29b1632f78  ./environment.yaml
 debce400cbc38d6b7cda6c752ca28c53  ./.gitignore
 8d003453aa86418ea82b84e93e9b68dc  ./LICENSE
-cf80e068934f87df2aa62a98445fccd0  ./Makefile
+8affee7ab0817f2692865a10c3e12a6b  ./Makefile
 ebba3a3a196ea7086d62b6ca261eb1b3  ./pyproject.toml
 b874e5285dae57135decedc74bb6832c  ./README.md
 f8ed12742006815a9ce12341ac8fa603  ./setup.py
@@ -14,12 +14,6 @@ d41d8cd98f00b204e9800998ecf8427e  ./tests/__init__.py
 875c9eed1e9e7e4715aa35b8ade43823  ./tests/test_aggregate.py
 15ff345745b995d55892cc7c9991ba9d  ./tests/test_mprofile.py
 441bf9bc67958968763a1d4cf8aec454  ./tests/test_parsers.py
-68b329da9893e34099c7d8ad5cb9c940  ./veptools.egg-info/dependency_links.txt
-e485f8e53aac2e2112d8b8762fa73b81  ./veptools.egg-info/entry_points.txt
-065b8b47add28e1fa6242b8d37fb402b  ./veptools.egg-info/PKG-INFO
-1d2a079d610f8ec35da9af81527049d9  ./veptools.egg-info/requires.txt
-94adcd60acb760abbe8ff36bb17de40b  ./veptools.egg-info/SOURCES.txt
-dbb4a8c34fc71026ea09bcdd48b90b03  ./veptools.egg-info/top_level.txt
 d41d8cd98f00b204e9800998ecf8427e  ./veptools/__init__.py
 de64d504fad62991f95f65cdb8fb567d  ./veptools/modules/aggregate.py
 d41d8cd98f00b204e9800998ecf8427e  ./veptools/modules/__init__.py

@@ -64,7 +64,7 @@ checksum:
 		\! -path "*__pycache__*" \
 		\! -path "./md5" \
 		\! -path "./veptools-build/*" \
-		\! -path "./transfold.egg-info/*" \
+		\! -path "./veptools.egg-info/*" \
 		\! -path "./dist/*" \
 		\! -path "./tests/output/*" \
 		-exec md5sum {} \; | sort -k 2 > md5
