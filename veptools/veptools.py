@@ -1,6 +1,8 @@
 import argparse
 import sys
 
+from rich import print
+
 from veptools.modules import aggregate, mprofile
 
 
@@ -124,8 +126,10 @@ def cli():  # pragma: no cover
     args = parser.parse_args()
     try:
         args.func(args)
+    except AttributeError:
+        parser.print_help(sys.stderr)
     except Exception as e:
-        print(e)
+        print(f"\n[bold red]error: {e}[/bold red]\n")
         parser.print_help(sys.stderr)
 
 
