@@ -23,7 +23,7 @@ def run_aggregate(args):  # pragma: no cover
     inp, out, sample_info = aggregate.assign_variables(args)
     aggregate.checkpoint(inp, sample_info)
     df = aggregate.get_aggregated_df(inp, sample_info)
-    df.to_csv(out, index=False, sep="\t")
+    aggregate.save_aggregated_df(df, out)
 
 
 def get_parser():

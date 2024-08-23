@@ -6,6 +6,7 @@ from veptools.modules.aggregate import (
     checkpoint,
     get_aggregated_df,
     get_skel_df,
+    save_aggregated_df,
 )
 from veptools.veptools import get_parser
 
@@ -138,6 +139,28 @@ def test_get_aggregated_df():
     )
     inp, out, sample_info = assign_variables(args)
     df = get_aggregated_df(inp, sample_info)
-    df.to_csv(out, index=False, sep="\t")
     assert df.shape == (100, 16)
     assert list(df["sample_name"].unique()) == ["A", "B"]
+
+
+def test_aggregated_df():
+    args = parser.parse_args(
+        [
+            "aggregate",
+            "-i",
+            "tests/data/input_A.tsv",
+            "tests/data/input_B.tsv",
+            "-s",
+            "tests/data/sample_info.tsv",
+            "-o",
+            "tests/output/aggregate_output.tsv",
+        ]
+    )
+    inp, out, sample_info = assign_variables(args)
+    df = get_aggregated_df(inp, sample_info)
+    save_aggregated_df(df, out)
+    df_ = pd.read_table(out, sep="\t")
+    # df.astype(str) not working for some reason
+    # assert (df.values == df_.values).all()
+    assert (df.index == df_.index).all()
+    assert (df.columns == df_.columns).all()

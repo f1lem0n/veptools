@@ -1,4 +1,5 @@
 import re
+from pathlib import Path
 
 import pandas as pd
 
@@ -50,8 +51,8 @@ def assign_variables(args):
 def checkpoint(inp, sample_info):
     # fmt: off
     assert len(inp) == sample_info.shape[0], \
-    "Number of files must be equal to"
-    " the number of lines in sample info file"
+        "Number of files must be equal to" \
+        " the number of lines in sample info file"
     # fmt: on
 
 
@@ -79,7 +80,14 @@ def get_aggregated_df(inp, sample_info):
                     val = regex.sub("", str(extra[col]))
                 else:
                     val = "NA"
+                if val == "-":
+                    val = "NA"
                 skel[col].append(val)
-
     df = pd.DataFrame(skel)
+    df = df.astype(str)
     return df
+
+
+def save_aggregated_df(df, out):
+    Path(out).parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(out, sep="\t", index=False)
