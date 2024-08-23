@@ -96,8 +96,6 @@ def get_parser():
     )
     mprofile_parser.set_defaults(func=run_mprofile)
 
-<<<<<<< Updated upstream
-=======
     # pgimpact
     pgimpact_parser = subparsers.add_parser(
         "pgimpact",
@@ -118,7 +116,6 @@ def get_parser():
         required=True,
     )
 
->>>>>>> Stashed changes
     return parser
 
 
