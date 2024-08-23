@@ -11,13 +11,13 @@ f8ed12742006815a9ce12341ac8fa603  ./setup.py
 3bab2d3404b7cf7cac487ad25c30b287  ./tests/data/input_B.tsv
 864097a7a05b85ef135a9b0a7f71f06e  ./tests/data/sample_info.tsv
 d41d8cd98f00b204e9800998ecf8427e  ./tests/__init__.py
-ec4a17e73a92e1c6076ce2992d03ce2d  ./tests/test_aggregate.py
+e7d5e20dad40ffe13462a140959bfa3c  ./tests/test_aggregate.py
 1e5b9ee5b72c235365e24c356013d9a4  ./tests/test_mprofile.py
 441bf9bc67958968763a1d4cf8aec454  ./tests/test_parsers.py
 d41d8cd98f00b204e9800998ecf8427e  ./veptools/__init__.py
-20095c1081c91ef978ebc8a95ce8a030  ./veptools/modules/aggregate.py
+cb0533dd446e6a87afd9d199fcb16a7e  ./veptools/modules/aggregate.py
 d41d8cd98f00b204e9800998ecf8427e  ./veptools/modules/__init__.py
 267c3ca766948db4cfb9ba4e7e0d90e3  ./veptools/modules/logger.py
 a0a105cd55de24dadd6a37dcf14aba2f  ./veptools/modules/mprofile.py
-e399449089a78938022c6dd546f2a581  ./veptools/veptools.py
+934a92098973a1de99fc4b5ef329bbf3  ./veptools/veptools.py
 031d2b105914bd41498040b838c6e3b1  ./veptools/_version.py

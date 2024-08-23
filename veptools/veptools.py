@@ -8,7 +8,7 @@ from veptools.modules import aggregate, mprofile
 
 class CustomParser(argparse.ArgumentParser):  # pragma: no cover
     def error(self, message):
-        sys.stderr.write("error: %s\n" % message)
+        print(f"\n[bold red]error: {message}[/bold red]\n")
         self.print_help()
         sys.exit(2)
 
@@ -128,8 +128,8 @@ def cli():  # pragma: no cover
         args.func(args)
     except AttributeError:
         parser.print_help(sys.stderr)
-    except Exception as e:
-        print(f"\n[bold red]error: {e}[/bold red]\n")
+    except Exception as message:
+        print(f"\n[bold red]error: {message}[/bold red]\n")
         parser.print_help(sys.stderr)
 
 
