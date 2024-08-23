@@ -21,7 +21,7 @@ def run_aggregate(args):  # pragma: no cover
     inp, out, sample_info = aggregate.assign_variables(args)
     aggregate.checkpoint(inp, sample_info)
     df = aggregate.get_aggregated_df(inp, sample_info)
-    df.to_csv(out, index=False)
+    df.to_csv(out, index=False, sep="\t")
 
 
 def get_parser():
@@ -53,7 +53,7 @@ def get_parser():
         "-s",
         metavar="<sample_info_path>",
         nargs=1,
-        help="path to comma separated sample info table",
+        help="path to tab separated sample info table",
         required=True,
     )
     aggregate_parser.set_defaults(func=run_aggregate)
