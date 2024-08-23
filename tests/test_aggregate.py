@@ -138,4 +138,6 @@ def test_get_aggregated_df():
     )
     inp, out, sample_info = assign_variables(args)
     df = get_aggregated_df(inp, sample_info)
+    df.to_csv(out, index=False, sep="\t")
     assert df.shape == (100, 16)
+    assert list(df["sample_name"].unique()) == ["A", "B"]
