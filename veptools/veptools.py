@@ -4,20 +4,20 @@ import sys
 from veptools.modules import aggregate, mprofile
 
 
-class CustomParser(argparse.ArgumentParser):
+class CustomParser(argparse.ArgumentParser):  # pragma: no cover
     def error(self, message):
         sys.stderr.write("error: %s\n" % message)
         self.print_help()
         sys.exit(2)
 
 
-def run_mprofile(args):
+def run_mprofile(args):  # pragma: no cover
     inp, out, genes, samples, binary = mprofile.assign_variables(args)
     profile = mprofile.calculate_profile(inp, genes, samples, binary)
     mprofile.save_profile(genes, samples, profile, out)
 
 
-def run_aggregate(args):
+def run_aggregate(args):  # pragma: no cover
     inp, out, sample_info = aggregate.assign_variables(args)
     aggregate.checkpoint(inp, sample_info)
     df = aggregate.get_aggregated_df(inp, sample_info)
@@ -76,11 +76,6 @@ def get_parser():
         help="path to output file",
         required=True,
     )
-    mprofile_parser.add_argument(
-        "--binary",
-        help="wether to calculate a binary profile",
-        action="store_true",
-    )
     group = mprofile_parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
         "-g",
@@ -94,12 +89,40 @@ def get_parser():
         nargs=1,
         help="path to gene list file where each gene is in new line",
     )
+    mprofile_parser.add_argument(
+        "--binary",
+        help="wether to calculate a binary profile",
+        action="store_true",
+    )
     mprofile_parser.set_defaults(func=run_mprofile)
 
+<<<<<<< Updated upstream
+=======
+    # pgimpact
+    pgimpact_parser = subparsers.add_parser(
+        "pgimpact",
+        help="calculate per gene impact",
+    )
+    pgimpact_parser.add_argument(
+        "-i",
+        metavar="<input>",
+        nargs="+",
+        help="path to input file created via veptools aggregate",
+        required=True,
+    )
+    pgimpact_parser.add_argument(
+        "-o",
+        metavar="<input>",
+        nargs="+",
+        help="path to output file",
+        required=True,
+    )
+
+>>>>>>> Stashed changes
     return parser
 
 
-def cli():
+def cli():  # pragma: no cover
     parser = get_parser()
     args = parser.parse_args()
     try:
@@ -109,5 +132,5 @@ def cli():
         parser.print_help(sys.stderr)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     cli()
