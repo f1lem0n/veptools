@@ -33,3 +33,6 @@ jobs:
         run:
           make test
 
+      - name: verify md5 checksum
+        run:
+          make diff

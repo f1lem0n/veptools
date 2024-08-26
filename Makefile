@@ -53,6 +53,7 @@ clean:
 
 checksum:
 	@echo "Generating repository checksum..."
+	@export LC_ALL=C
 	@find . -type f \
 		\! -path "./.vscode/*" \
 		\! -path "./.git/*" \
@@ -72,6 +73,7 @@ checksum:
 
 diff:
 	@echo "Verifying repository checksum..."
+	@export LC_ALL=C
 	@find . -type f \
 		\! -path "./.vscode/*" \
 		\! -path "./.git/*" \
