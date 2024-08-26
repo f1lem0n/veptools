@@ -1,0 +1,42 @@
+name: dev
+on:
+  push:
+    paths:
+      - 'environment.yaml'
+      - '.github/workflows/dev.yaml'
+
+jobs:
+  create-env:
+    name: ${{ matrix.os }} 
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash -l {0}
+        
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
+        
+      - name: create environment with mamba
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-activate-base: false
+          activate-environment: veptools
+          environment-file: environment.yaml
+      
+      - name: lint via pylint
+        run:
+          make lint
+
+      - name: test via pytest
+        run:
+          make test
+
+      - name: checksum diff
+        run:
+          make diff
