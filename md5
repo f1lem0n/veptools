@@ -1,4 +1,5 @@
-d06294dd82dd7b6eca018c29b1632f78  ./environment.yaml
+0374638b8af71e26b798750913b73538  ./environment.yaml
+c77ddbc13ee2142c1d985ec567a72a34  ./.github/workflows/dev.yaml
 debce400cbc38d6b7cda6c752ca28c53  ./.gitignore
 8d003453aa86418ea82b84e93e9b68dc  ./LICENSE
 8affee7ab0817f2692865a10c3e12a6b  ./Makefile
