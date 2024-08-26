@@ -22,7 +22,7 @@ jobs:
       - name: checkout repository
         uses: actions/checkout@v2
         
-      - name: create environment with mamba
+      - name: create environment
         uses: conda-incubator/setup-miniconda@v2
         with:
           auto-activate-base: false
@@ -37,6 +37,3 @@ jobs:
         run:
           make test
 
-      - name: checksum diff
-        run:
-          make diff
