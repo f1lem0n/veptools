@@ -1,9 +1,5 @@
 name: dev
-on:
-  push:
-    paths:
-      - 'environment.yaml'
-      - '.github/workflows/dev.yaml'
+on: [push]
 
 jobs:
   create-env:
