@@ -1,0 +1,17 @@
+name: Pylint
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+    - name: Install dependencies
+      run: |
+        conda env create -f environment.yaml
+    - name: Analysing the code with pylint
+      run: |
+        conda activate veptools
+        make lint
