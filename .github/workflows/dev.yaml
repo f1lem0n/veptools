@@ -25,6 +25,10 @@ jobs:
           activate-environment: veptools
           environment-file: environment.yaml
       
+      - name: verify sha256 checksum
+        run:
+          make diff
+
       - name: lint via pylint
         run:
           make lint
@@ -32,7 +36,3 @@ jobs:
       - name: test via pytest
         run:
           make test
-
-      - name: verify sha256 checksum
-        run:
-          make diff
