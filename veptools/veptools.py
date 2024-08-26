@@ -117,6 +117,13 @@ def get_parser():
         help="path to output file",
         required=True,
     )
+    pgimpact_parser.add_argument(
+        "-c",
+        metavar="<input>",
+        nargs="+",
+        help="columns to include besides gene_id, gene_symbol and count statistics",
+        required=True,
+    )
 
     return parser
 
