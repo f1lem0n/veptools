@@ -3,7 +3,7 @@ import sys
 
 from rich import print
 
-from veptools.modules import aggregate, mprofile
+from veptools.modules import aggregate, mprofile, pgimpact
 
 
 class CustomParser(argparse.ArgumentParser):  # pragma: no cover
@@ -24,6 +24,12 @@ def run_aggregate(args):  # pragma: no cover
     aggregate.checkpoint(inp, sample_info)
     df = aggregate.get_aggregated_df(inp, sample_info)
     aggregate.save_aggregated_df(df, out)
+
+
+def run_pgimpact(args):
+    inp, out, grouping_var, conf_level = pgimpact.assign_variables(args)
+    df = pgimpact.get_pgimpact_df(inp, grouping_var, conf_level)
+    pgimpact.save_pgimpact(df, out)
 
 
 def get_parser():
@@ -106,24 +112,33 @@ def get_parser():
     pgimpact_parser.add_argument(
         "-i",
         metavar="<input>",
-        nargs="+",
+        nargs=1,
         help="path to input file created via veptools aggregate",
         required=True,
     )
     pgimpact_parser.add_argument(
         "-o",
         metavar="<input>",
-        nargs="+",
+        nargs=1,
         help="path to output file",
+        required=True,
+    )
+    pgimpact_parser.add_argument(
+        "-g",
+        metavar="<input>",
+        nargs=1,
+        help="grouping variable present in aggregated table",
         required=True,
     )
     pgimpact_parser.add_argument(
         "-c",
         metavar="<input>",
-        nargs="+",
-        help="columns to include besides gene_id, gene_symbol and count statistics",
+        nargs=1,
+        help="confidence level",
         required=True,
+        default=0.95,
     )
+    pgimpact_parser.set_defaults(func=run_pgimpact)
 
     return parser
 
