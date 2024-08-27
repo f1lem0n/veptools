@@ -1,6 +1,6 @@
 import argparse
-import traceback
 import sys
+import traceback
 
 from rich import print
 
@@ -14,17 +14,17 @@ class CustomParser(argparse.ArgumentParser):  # pragma: no cover
         sys.exit(2)
 
 
+def run_aggregate(args):  # pragma: no cover
+    inp, out, sample_info, verbose = aggregate.assign_variables(args)
+    aggregate.checkpoint(inp, sample_info, verbose)
+    df = aggregate.get_aggregated_df(inp, sample_info, verbose)
+    aggregate.save_aggregated_df(df, out, verbose)
+
+
 def run_mprofile(args):  # pragma: no cover
     inp, out, genes, samples, binary = mprofile.assign_variables(args)
     profile = mprofile.calculate_profile(inp, genes, samples, binary)
     mprofile.save_profile(genes, samples, profile, out)
-
-
-def run_aggregate(args):  # pragma: no cover
-    inp, out, sample_info = aggregate.assign_variables(args)
-    aggregate.checkpoint(inp, sample_info)
-    df = aggregate.get_aggregated_df(inp, sample_info)
-    aggregate.save_aggregated_df(df, out)
 
 
 def run_pgimpact(args):  # pragma: no cover
@@ -70,7 +70,7 @@ def get_parser():
         help="path to tab separated sample info table",
         required=True,
     )
-    aggregate_parser.set_defaults(func=run_aggregate)
+    aggregate_parser.set_defaults(func=run_aggregate, name="aggregate")
 
     # mprofile
     mprofile_parser = subparsers.add_parser(

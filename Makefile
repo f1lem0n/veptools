@@ -22,7 +22,7 @@ help:
 	@echo "install - build and install current development version in a virtual environment"
 
 test:
-	@time coverage run -m pytest -sxv --log-level=DEBUG && \
+	@time coverage run -m pytest -xv --log-level=DEBUG --capture=sys && \
 		echo "" && \
 		echo "COVERAGE REPORT:" && \
 		echo "" && \
