@@ -18,11 +18,12 @@ help:
 	@echo "lint - static code analysis with flake8 and mypy"
 	@echo "clean - remove common artifacts from the directory tree as well as built and installed package"
 	@echo "checksum - generate md5 checksum of the repository"
-	@echo "diff - verify md5 checksum of the repository (if stdout is empty then checksums are equal)"
+	@echo "diff - verify sha256 checksums of files in the repository locally"
+	@echo "extdiff - verify sha256 checksum of files in the repository against main branch"
 	@echo "install - build and install current development version in a virtual environment"
 
 test:
-	@time coverage run -m pytest -sxv --log-level=DEBUG && \
+	@time coverage run -m pytest -xv --log-level=DEBUG --capture=sys && \
 		echo "" && \
 		echo "COVERAGE REPORT:" && \
 		echo "" && \
@@ -39,7 +40,7 @@ lint:
 	@mypy --install-types --non-interactive veptools/ tests/ setup.py
 
 clean:
-	@rm -rf .coverage .pytest-monitor .pytest_cache .mypy_cache
+	@rm -rf .coverage .pytest-monitor .pytest_cache .mypy_cache sha256tmp
 	@rm -rf \
 		__pycache__ \
 		veptools/__pycache__ \
@@ -64,6 +65,7 @@ checksum:
 		\! -path "./.coverage" \
 		\! -path "*__pycache__*" \
 		\! -path "./sha256" \
+		\! -path "./sha256tmp" \
 		\! -path "./veptools-build/*" \
 		\! -path "./veptools.egg-info/*" \
 		\! -path "./dist/*" \
@@ -83,11 +85,34 @@ diff:
 		\! -path "./.coverage" \
 		\! -path "*__pycache__*" \
 		\! -path "./sha256" \
+		\! -path "./sha256tmp" \
 		\! -path "./veptools-build/*" \
 		\! -path "./veptools.egg-info/*" \
 		\! -path "./dist/*" \
 		\! -path "./tests/output/*" \
 		-exec openssl sha256 {} \; | sort -k 2 | diff - sha256
+	@echo "Checksums are equal!"
+
+extdiff:
+	@echo "Verifying repository checksum..."
+	@export LC_ALL=C
+	@curl https://raw.githubusercontent.com/f1lem0n/veptools/main/sha256 > sha256tmp
+	@find . -type f \
+		\! -path "./.vscode/*" \
+		\! -path "./.git/*" \
+		\! -path "./.pytest_cache/*" \
+		\! -path "./.mypy_cache/*" \
+		\! -path "./.pytest-monitor/*" \
+		\! -path "./.coverage" \
+		\! -path "*__pycache__*" \
+		\! -path "./sha256" \
+		\! -path "./sha256tmp" \
+		\! -path "./veptools-build/*" \
+		\! -path "./veptools.egg-info/*" \
+		\! -path "./dist/*" \
+		\! -path "./tests/output/*" \
+		-exec openssl sha256 {} \; | sort -k 2 | diff - sha256tmp
+	@rm sha256tmp
 	@echo "Checksums are equal!"
 
 install:

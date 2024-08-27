@@ -1,6 +1,6 @@
 import argparse
-import traceback
 import sys
+import traceback
 
 from rich import print
 
@@ -14,23 +14,23 @@ class CustomParser(argparse.ArgumentParser):  # pragma: no cover
         sys.exit(2)
 
 
-def run_mprofile(args):  # pragma: no cover
-    inp, out, genes, samples, binary = mprofile.assign_variables(args)
-    profile = mprofile.calculate_profile(inp, genes, samples, binary)
-    mprofile.save_profile(genes, samples, profile, out)
-
-
 def run_aggregate(args):  # pragma: no cover
-    inp, out, sample_info = aggregate.assign_variables(args)
-    aggregate.checkpoint(inp, sample_info)
-    df = aggregate.get_aggregated_df(inp, sample_info)
-    aggregate.save_aggregated_df(df, out)
+    inp, out, sample_info, verbose = aggregate.assign_variables(args)
+    aggregate.checkpoint(inp, sample_info, verbose)
+    df = aggregate.get_aggregated_df(inp, sample_info, verbose)
+    aggregate.save_aggregated_df(df, out, verbose)
+
+
+def run_mprofile(args):  # pragma: no cover
+    inp, out, genes, samples, binary, verbose = mprofile.assign_variables(args)
+    profile = mprofile.calculate_profile(inp, genes, samples, binary, verbose)
+    mprofile.save_profile(genes, samples, profile, out, verbose)
 
 
 def run_pgimpact(args):  # pragma: no cover
-    inp, out, grouping_var = pgimpact.assign_variables(args)
-    df = pgimpact.get_pgimpact_df(inp, grouping_var)
-    pgimpact.save_pgimpact(df, out)
+    inp, out, grouping_var, verbose = pgimpact.assign_variables(args)
+    df = pgimpact.get_pgimpact_df(inp, grouping_var, verbose)
+    pgimpact.save_pgimpact(df, out, verbose)
 
 
 def get_parser():
@@ -39,6 +39,7 @@ def get_parser():
     parser = CustomParser(prog="veptools", description="")
     parser.add_argument(
         "-v",
+        "--verbose",
         help="enable verbosity",
         action="store_true",
     )
@@ -51,21 +52,24 @@ def get_parser():
     )
     aggregate_parser.add_argument(
         "-i",
-        metavar="<input>",
+        "--input",
+        metavar="<path>",
         nargs="+",
         help="path to input file(s)",
         required=True,
     )
     aggregate_parser.add_argument(
         "-o",
-        metavar="<output>",
+        "--output",
+        metavar="<path>",
         nargs=1,
         help="path to output file",
         required=True,
     )
     aggregate_parser.add_argument(
         "-s",
-        metavar="<sample_info_path>",
+        "--sample-info",
+        metavar="<path>",
         nargs=1,
         help="path to tab separated sample info table",
         required=True,
@@ -78,14 +82,16 @@ def get_parser():
     )
     mprofile_parser.add_argument(
         "-i",
-        metavar="<input>",
+        "--input",
+        metavar="<path>",
         nargs="+",
         help="path to input file created via veptools aggregate",
         required=True,
     )
     mprofile_parser.add_argument(
         "-o",
-        metavar="<output>",
+        "--output",
+        metavar="<path>",
         nargs=1,
         help="path to output file",
         required=True,
@@ -93,17 +99,20 @@ def get_parser():
     group = mprofile_parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
         "-g",
-        metavar="<gene>",
+        "--genes",
+        metavar="<str>",
         nargs="+",
         help="whitespace separated list of genes to consider in profile",
     )
     group.add_argument(
         "-G",
-        metavar="<gene_list_path>",
+        "--gene-list",
+        metavar="<path>",
         nargs=1,
         help="path to gene list file where each gene is in new line",
     )
     mprofile_parser.add_argument(
+        "-b",
         "--binary",
         help="wether to calculate a binary profile",
         action="store_true",
@@ -117,21 +126,24 @@ def get_parser():
     )
     pgimpact_parser.add_argument(
         "-i",
-        metavar="<input>",
+        "--input",
+        metavar="<path>",
         nargs=1,
         help="path to input file created via veptools aggregate",
         required=True,
     )
     pgimpact_parser.add_argument(
         "-o",
-        metavar="<input>",
+        "--output",
+        metavar="<path>",
         nargs=1,
         help="path to output file",
         required=True,
     )
     pgimpact_parser.add_argument(
         "-g",
-        metavar="<input>",
+        "--grouping-var",
+        metavar="<str>",
         nargs=1,
         help="grouping variable present in aggregated table",
         required=True,
@@ -147,7 +159,7 @@ def cli():  # pragma: no cover
     try:
         args.func(args)
     except Exception as message:
-        if args.v:
+        if args.verbose:
             print(traceback.format_exc())
         print(f"\n[bold red]error: {message}[/bold red]\n")
         parser.print_help(sys.stderr)

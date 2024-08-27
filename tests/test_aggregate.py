@@ -26,7 +26,7 @@ def test_assign_variables():
             "tests/output/aggregate_output.tsv",
         ]
     )
-    inp, out, sample_info = assign_variables(args)
+    inp, out, sample_info, verbose = assign_variables(args)
     assert inp == ["tests/data/input_A.tsv", "tests/data/input_B.tsv"]
     assert out == "tests/output/aggregate_output.tsv"
     assert (
@@ -56,6 +56,7 @@ def test_assign_variables():
             }
         ).columns
     ).all()
+    assert verbose is False
 
 
 def test_checkpoint():
@@ -71,8 +72,8 @@ def test_checkpoint():
             "tests/output/aggregate_output.tsv",
         ]
     )
-    inp, out, sample_info = assign_variables(args)
-    checkpoint(inp, sample_info)
+    inp, out, sample_info, verbose = assign_variables(args)
+    checkpoint(inp, sample_info, verbose)
     with pytest.raises(AssertionError):
         args = parser.parse_args(
             [
@@ -85,8 +86,8 @@ def test_checkpoint():
                 "tests/output/aggregate_output.tsv",
             ]
         )
-        inp, out, sample_info = assign_variables(args)
-        checkpoint(inp, sample_info)
+        inp, out, sample_info, verbose = assign_variables(args)
+        checkpoint(inp, sample_info, verbose)
 
 
 def test_get_skel_df():
@@ -102,8 +103,8 @@ def test_get_skel_df():
             "tests/output/aggregate_output.tsv",
         ]
     )
-    inp, out, sample_info = assign_variables(args)
-    skel = get_skel_df(sample_info)
+    inp, out, sample_info, verbose = assign_variables(args)
+    skel = get_skel_df(sample_info, verbose)
     assert skel == {
         "gene_id": [],
         "SYMBOL": [],
@@ -137,8 +138,8 @@ def test_get_aggregated_df():
             "tests/output/aggregate_output.tsv",
         ]
     )
-    inp, out, sample_info = assign_variables(args)
-    df = get_aggregated_df(inp, sample_info)
+    inp, out, sample_info, verbose = assign_variables(args)
+    df = get_aggregated_df(inp, sample_info, verbose)
     assert df.shape == (100, 16)
     assert list(df["sample_name"].unique()) == ["A", "B"]
 
@@ -156,9 +157,9 @@ def test_aggregated_df():
             "tests/output/aggregate_output.tsv",
         ]
     )
-    inp, out, sample_info = assign_variables(args)
-    df = get_aggregated_df(inp, sample_info)
-    save_aggregated_df(df, out)
+    inp, out, sample_info, verbose = assign_variables(args)
+    df = get_aggregated_df(inp, sample_info, verbose)
+    save_aggregated_df(df, out, verbose)
     df_ = pd.read_table(out, sep="\t")
     # df.astype(str) not working for some reason
     # assert (df.values == df_.values).all()

@@ -28,7 +28,7 @@ def test_assign_variables():
             "ARHGEF16",
         ]
     )
-    inp, out, genes, samples, binary = assign_variables(args)
+    inp, out, genes, samples, binary, verbose = assign_variables(args)
     assert inp.shape == (100, 16)
     assert out == "tests/output/mprofile_output.tsv"
     assert genes == [
@@ -53,7 +53,7 @@ def test_assign_variables():
             "--binary",
         ]
     )
-    inp, out, genes, samples, binary = assign_variables(args)
+    inp, out, genes, samples, binary, verbose = assign_variables(args)
     assert inp.shape == (100, 16)
     assert out == "tests/output/mprofile_output.tsv"
     assert genes == [
@@ -81,8 +81,8 @@ def test_calculate_profile():
             "--binary",
         ]
     )
-    inp, out, genes, samples, binary = assign_variables(args)
-    profile = calculate_profile(inp, genes, samples, binary)
+    inp, out, genes, samples, binary, verbose = assign_variables(args)
+    profile = calculate_profile(inp, genes, samples, binary, verbose)
     assert (profile == np.array([[1, 0], [0, 0], [0, 1], [0, 1]])).all()
 
     # count
@@ -97,8 +97,8 @@ def test_calculate_profile():
             "tests/data/gene_list.txt",
         ]
     )
-    inp, out, genes, samples, binary = assign_variables(args)
-    profile = calculate_profile(inp, genes, samples, binary)
+    inp, out, genes, samples, binary, verbose = assign_variables(args)
+    profile = calculate_profile(inp, genes, samples, binary, verbose)
     assert (profile == np.array([[3, 0], [0, 0], [0, 5], [0, 7]])).all()
 
 
@@ -114,9 +114,9 @@ def test_save_profile():
             "tests/data/gene_list.txt",
         ]
     )
-    inp, out, genes, samples, binary = assign_variables(args)
-    profile = calculate_profile(inp, genes, samples, binary)
-    save_profile(genes, samples, profile, out)
+    inp, out, genes, samples, binary, verbose = assign_variables(args)
+    profile = calculate_profile(inp, genes, samples, binary, verbose)
+    save_profile(genes, samples, profile, out, verbose)
     df = pd.read_table(
         "tests/output/mprofile_output.tsv", index_col=0, sep="\t"
     )

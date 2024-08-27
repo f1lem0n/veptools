@@ -22,7 +22,7 @@ def test_assign_variables():
             "phenotype",
         ]
     )
-    inp, out, grouping_var = assign_variables(args)
+    inp, out, grouping_var, verbose = assign_variables(args)
     assert inp.shape == (100, 16)
     assert out == "tests/output/pgimpact_output.tsv"
     assert grouping_var == "phenotype"
@@ -40,8 +40,8 @@ def test_get_pgimpact_df():
             "phenotype",
         ]
     )
-    inp, out, grouping_var = assign_variables(args)
-    pgimpact_df = get_pgimpact_df(inp, grouping_var)
+    inp, out, grouping_var, verbose = assign_variables(args)
+    pgimpact_df = get_pgimpact_df(inp, grouping_var, verbose)
     assert (
         pgimpact_df.columns
         == [
@@ -70,9 +70,9 @@ def test_save_pgimpact():
             "phenotype",
         ]
     )
-    inp, out, grouping_var = assign_variables(args)
-    pgimpact_df = get_pgimpact_df(inp, grouping_var)
-    save_pgimpact(pgimpact_df, out)
+    inp, out, grouping_var, verbose = assign_variables(args)
+    pgimpact_df = get_pgimpact_df(inp, grouping_var, verbose)
+    save_pgimpact(pgimpact_df, out, verbose)
     df = pd.read_table(out, sep="\t")
     assert (pgimpact_df.index == df.index).all()
     assert (pgimpact_df.columns == df.columns).all()

@@ -3,26 +3,34 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from veptools.modules.logger import Logger
+
+LOGGER = Logger(name="mprofile")
+
 
 def assign_variables(args):
-    inp = pd.read_table(args.i[0], sep="\t")
-    out = args.o[0]
+    inp = pd.read_table(args.input[0], sep="\t")
+    out = args.output[0]
     binary = args.binary
     samples = list(inp["sample_name"].unique())
 
-    if args.g:
-        genes = args.g
+    if args.genes:
+        genes = args.genes
     else:
-        with open(args.G[0]) as f:
+        with open(args.gene_list[0]) as f:
             genes = f.read().splitlines()
 
-    return inp, out, genes, samples, binary
+    return inp, out, genes, samples, binary, args.verbose
 
 
-def calculate_profile(inp, genes, samples, binary):
+def calculate_profile(inp, genes, samples, binary, verbose):
     inp = inp[inp["gene_id"].isin(genes) | inp["SYMBOL"].isin(genes)]
     profile = np.zeros((len(genes), len(samples)))
+    if verbose:  # pragma: no cover
+        LOGGER.info(f"Binary mode enabled: {binary}")
     for sample_idx, sample in enumerate(samples):
+        if verbose:  # pragma: no cover
+            LOGGER.debug(f"Calculating mutation profile for sample: {sample}")
         df = inp[inp["sample_name"] == sample]
         for gene_idx, gene in enumerate(genes):
             if gene in list(df["gene_id"]):
@@ -45,7 +53,9 @@ def calculate_profile(inp, genes, samples, binary):
     return profile
 
 
-def save_profile(genes, samples, profile, out):
+def save_profile(genes, samples, profile, out, verbose):
+    if verbose:  # pragma: no cover
+        LOGGER.info(f"Saving mutation profile to: {out}")
     profile = pd.DataFrame(
         data=profile,
         columns=samples,
