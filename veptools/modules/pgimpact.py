@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pandas as pd
 
-from veptools.modules.mprofile import calculate_profile
 from veptools.modules.logger import Logger
+from veptools.modules.mprofile import calculate_profile
 
 LOGGER = Logger(name="pgimpact")
 

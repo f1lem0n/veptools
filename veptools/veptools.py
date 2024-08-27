@@ -38,7 +38,8 @@ def get_parser():
     # main parser
     parser = CustomParser(prog="veptools", description="")
     parser.add_argument(
-        "-v", "--verbose",
+        "-v",
+        "--verbose",
         help="enable verbosity",
         action="store_true",
     )
@@ -50,21 +51,24 @@ def get_parser():
         help="aggregate VEP results and sample info into a single table",
     )
     aggregate_parser.add_argument(
-        "-i", "--input",
+        "-i",
+        "--input",
         metavar="<path>",
         nargs="+",
         help="path to input file(s)",
         required=True,
     )
     aggregate_parser.add_argument(
-        "-o", "--output",
+        "-o",
+        "--output",
         metavar="<path>",
         nargs=1,
         help="path to output file",
         required=True,
     )
     aggregate_parser.add_argument(
-        "-s", "--sample-info",
+        "-s",
+        "--sample-info",
         metavar="<path>",
         nargs=1,
         help="path to tab separated sample info table",
@@ -77,14 +81,16 @@ def get_parser():
         "mprofile", help="calculate mutation profile"
     )
     mprofile_parser.add_argument(
-        "-i", "--input",
+        "-i",
+        "--input",
         metavar="<path>",
         nargs="+",
         help="path to input file created via veptools aggregate",
         required=True,
     )
     mprofile_parser.add_argument(
-        "-o", "--output",
+        "-o",
+        "--output",
         metavar="<path>",
         nargs=1,
         help="path to output file",
@@ -92,19 +98,22 @@ def get_parser():
     )
     group = mprofile_parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
-        "-g", "--genes",
+        "-g",
+        "--genes",
         metavar="<str>",
         nargs="+",
         help="whitespace separated list of genes to consider in profile",
     )
     group.add_argument(
-        "-G", "--gene-list",
+        "-G",
+        "--gene-list",
         metavar="<path>",
         nargs=1,
         help="path to gene list file where each gene is in new line",
     )
     mprofile_parser.add_argument(
-        "-b", "--binary",
+        "-b",
+        "--binary",
         help="wether to calculate a binary profile",
         action="store_true",
     )
@@ -116,21 +125,24 @@ def get_parser():
         help="calculate per gene impact",
     )
     pgimpact_parser.add_argument(
-        "-i", "--input",
+        "-i",
+        "--input",
         metavar="<path>",
         nargs=1,
         help="path to input file created via veptools aggregate",
         required=True,
     )
     pgimpact_parser.add_argument(
-        "-o", "--output",
+        "-o",
+        "--output",
         metavar="<path>",
         nargs=1,
         help="path to output file",
         required=True,
     )
     pgimpact_parser.add_argument(
-        "-g", "--grouping-var",
+        "-g",
+        "--grouping-var",
         metavar="<str>",
         nargs=1,
         help="grouping variable present in aggregated table",

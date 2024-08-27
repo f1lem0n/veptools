@@ -26,7 +26,7 @@ def assign_variables(args):
 def calculate_profile(inp, genes, samples, binary, verbose):
     inp = inp[inp["gene_id"].isin(genes) | inp["SYMBOL"].isin(genes)]
     profile = np.zeros((len(genes), len(samples)))
-    if verbose: # pragma: no cover
+    if verbose:  # pragma: no cover
         LOGGER.info(f"Binary mode enabled: {binary}")
     for sample_idx, sample in enumerate(samples):
         if verbose:  # pragma: no cover
