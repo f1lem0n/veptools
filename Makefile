@@ -53,6 +53,7 @@ clean:
 
 checksum:
 	@echo "Generating repository checksum..."
+	@export LC_ALL=C
 	@find . -type f \
 		\! -path "./.vscode/*" \
 		\! -path "./.git/*" \
@@ -62,16 +63,17 @@ checksum:
 		\! -path "./.pytest-monitor/*" \
 		\! -path "./.coverage" \
 		\! -path "*__pycache__*" \
-		\! -path "./md5" \
+		\! -path "./sha256" \
 		\! -path "./veptools-build/*" \
 		\! -path "./veptools.egg-info/*" \
 		\! -path "./dist/*" \
 		\! -path "./tests/output/*" \
-		-exec md5sum {} \; | sort -k 2 > md5
+		-exec openssl sha256 {} \; | sort -k 2 > sha256
 	@echo "Checksum generated!"
 
 diff:
 	@echo "Verifying repository checksum..."
+	@export LC_ALL=C
 	@find . -type f \
 		\! -path "./.vscode/*" \
 		\! -path "./.git/*" \
@@ -80,12 +82,12 @@ diff:
 		\! -path "./.pytest-monitor/*" \
 		\! -path "./.coverage" \
 		\! -path "*__pycache__*" \
-		\! -path "./md5" \
+		\! -path "./sha256" \
 		\! -path "./veptools-build/*" \
 		\! -path "./veptools.egg-info/*" \
 		\! -path "./dist/*" \
 		\! -path "./tests/output/*" \
-		-exec md5sum {} \; | sort -k 2 | diff - md5
+		-exec openssl sha256 {} \; | sort -k 2 | diff - sha256
 	@echo "Checksums are equal!"
 
 install:

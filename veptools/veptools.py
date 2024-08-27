@@ -1,33 +1,47 @@
 import argparse
+import traceback
 import sys
 
-from veptools.modules import aggregate, mprofile
+from rich import print
+
+from veptools.modules import aggregate, mprofile, pgimpact
 
 
-class CustomParser(argparse.ArgumentParser):
+class CustomParser(argparse.ArgumentParser):  # pragma: no cover
     def error(self, message):
-        sys.stderr.write("error: %s\n" % message)
+        print(f"\n[bold red]error: {message}[/bold red]\n")
         self.print_help()
         sys.exit(2)
 
 
-def run_mprofile(args):
+def run_mprofile(args):  # pragma: no cover
     inp, out, genes, samples, binary = mprofile.assign_variables(args)
     profile = mprofile.calculate_profile(inp, genes, samples, binary)
     mprofile.save_profile(genes, samples, profile, out)
 
 
-def run_aggregate(args):
+def run_aggregate(args):  # pragma: no cover
     inp, out, sample_info = aggregate.assign_variables(args)
     aggregate.checkpoint(inp, sample_info)
     df = aggregate.get_aggregated_df(inp, sample_info)
-    df.to_csv(out, index=False, sep="\t")
+    aggregate.save_aggregated_df(df, out)
+
+
+def run_pgimpact(args):  # pragma: no cover
+    inp, out, grouping_var = pgimpact.assign_variables(args)
+    df = pgimpact.get_pgimpact_df(inp, grouping_var)
+    pgimpact.save_pgimpact(df, out)
 
 
 def get_parser():
 
     # main parser
     parser = CustomParser(prog="veptools", description="")
+    parser.add_argument(
+        "-v",
+        help="enable verbosity",
+        action="store_true",
+    )
     subparsers = parser.add_subparsers(title="commands")
 
     # aggregate
@@ -76,11 +90,6 @@ def get_parser():
         help="path to output file",
         required=True,
     )
-    mprofile_parser.add_argument(
-        "--binary",
-        help="wether to calculate a binary profile",
-        action="store_true",
-    )
     group = mprofile_parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
         "-g",
@@ -94,32 +103,55 @@ def get_parser():
         nargs=1,
         help="path to gene list file where each gene is in new line",
     )
+    mprofile_parser.add_argument(
+        "--binary",
+        help="wether to calculate a binary profile",
+        action="store_true",
+    )
     mprofile_parser.set_defaults(func=run_mprofile)
 
     # pgimpact
-    # pgimpact_parser = subparsers.add_parser(
-    #    "pgimpact", help="calculate per gene impact",
-    # )
-    # pgimpact_parser.add_argument(
-    #    "-i",
-    #    metavar="<input>",
-    #    nargs="+",
-    #    help="path to input file created via veptools aggregate",
-    #    required=True,
-    # )
+    pgimpact_parser = subparsers.add_parser(
+        "pgimpact",
+        help="calculate per gene impact",
+    )
+    pgimpact_parser.add_argument(
+        "-i",
+        metavar="<input>",
+        nargs=1,
+        help="path to input file created via veptools aggregate",
+        required=True,
+    )
+    pgimpact_parser.add_argument(
+        "-o",
+        metavar="<input>",
+        nargs=1,
+        help="path to output file",
+        required=True,
+    )
+    pgimpact_parser.add_argument(
+        "-g",
+        metavar="<input>",
+        nargs=1,
+        help="grouping variable present in aggregated table",
+        required=True,
+    )
+    pgimpact_parser.set_defaults(func=run_pgimpact)
 
     return parser
 
 
-def cli():
+def cli():  # pragma: no cover
     parser = get_parser()
     args = parser.parse_args()
     try:
         args.func(args)
-    except Exception as e:
-        print(e)
+    except Exception as message:
+        if args.v:
+            print(traceback.format_exc())
+        print(f"\n[bold red]error: {message}[/bold red]\n")
         parser.print_help(sys.stderr)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     cli()

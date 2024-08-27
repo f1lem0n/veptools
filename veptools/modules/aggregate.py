@@ -1,3 +1,6 @@
+import re
+from pathlib import Path
+
 import pandas as pd
 
 COLNAMES = [
@@ -46,8 +49,11 @@ def assign_variables(args):
 
 
 def checkpoint(inp, sample_info):
-    assert len(inp) == sample_info.shape[0], "Number of files must be equal to"
-    " the number of lines in sample info file"
+    # fmt: off
+    assert len(inp) == sample_info.shape[0], \
+        "Number of files must be equal to" \
+        " the number of lines in sample info file"
+    # fmt: on
 
 
 def get_skel_df(sample_info):
@@ -59,7 +65,7 @@ def get_skel_df(sample_info):
 
 def get_aggregated_df(inp, sample_info):
     skel = get_skel_df(sample_info)
-
+    regex = re.compile(r"(\([0-9]+\.[0-9]+\)|\([0-9]\))")
     for info, file in zip(sample_info.iterrows(), inp):
         df = pd.read_table(file, sep="\t", names=COLNAMES)
         for _, row in df.iterrows():
@@ -67,13 +73,21 @@ def get_aggregated_df(inp, sample_info):
             extra = {elem.split("=")[0]: elem.split("=")[1] for elem in extra}
             for col in skel.keys():
                 if col in df.columns:
-                    skel[col].append(row[col])
+                    val = regex.sub("", str(row[col]))
                 elif col in sample_info.columns:
-                    skel[col].append(info[1][col])
+                    val = regex.sub("", str(info[1][col]))
                 elif col in extra:
-                    skel[col].append(extra[col])
+                    val = regex.sub("", str(extra[col]))
                 else:
-                    skel[col].append("-")
-
+                    val = "NA"
+                if val == "-":
+                    val = "NA"
+                skel[col].append(val)
     df = pd.DataFrame(skel)
+    df = df.astype(str)
     return df
+
+
+def save_aggregated_df(df, out):
+    Path(out).parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(out, sep="\t", index=False)
