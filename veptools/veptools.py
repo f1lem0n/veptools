@@ -1,4 +1,5 @@
 import argparse
+import traceback
 import sys
 
 from rich import print
@@ -26,9 +27,9 @@ def run_aggregate(args):  # pragma: no cover
     aggregate.save_aggregated_df(df, out)
 
 
-def run_pgimpact(args):
-    inp, out, grouping_var, conf_level = pgimpact.assign_variables(args)
-    df = pgimpact.get_pgimpact_df(inp, grouping_var, conf_level)
+def run_pgimpact(args):  # pragma: no cover
+    inp, out, grouping_var = pgimpact.assign_variables(args)
+    df = pgimpact.get_pgimpact_df(inp, grouping_var)
     pgimpact.save_pgimpact(df, out)
 
 
@@ -36,6 +37,11 @@ def get_parser():
 
     # main parser
     parser = CustomParser(prog="veptools", description="")
+    parser.add_argument(
+        "-v",
+        help="enable verbosity",
+        action="store_true",
+    )
     subparsers = parser.add_subparsers(title="commands")
 
     # aggregate
@@ -130,14 +136,6 @@ def get_parser():
         help="grouping variable present in aggregated table",
         required=True,
     )
-    pgimpact_parser.add_argument(
-        "-c",
-        metavar="<input>",
-        nargs=1,
-        help="confidence level",
-        required=True,
-        default=0.95,
-    )
     pgimpact_parser.set_defaults(func=run_pgimpact)
 
     return parser
@@ -148,9 +146,9 @@ def cli():  # pragma: no cover
     args = parser.parse_args()
     try:
         args.func(args)
-    except AttributeError:
-        parser.print_help(sys.stderr)
     except Exception as message:
+        if args.v == True:
+            print(traceback.format_exc())
         print(f"\n[bold red]error: {message}[/bold red]\n")
         parser.print_help(sys.stderr)
 
