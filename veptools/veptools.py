@@ -147,7 +147,7 @@ def cli():  # pragma: no cover
     try:
         args.func(args)
     except Exception as message:
-        if args.v == True:
+        if args.v:
             print(traceback.format_exc())
         print(f"\n[bold red]error: {message}[/bold red]\n")
         parser.print_help(sys.stderr)
