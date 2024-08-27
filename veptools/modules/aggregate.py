@@ -43,13 +43,13 @@ DESIRED_COLS = [
 
 
 def assign_variables(args):
-    inp = args.i
-    out = args.o[0]
+    inp = args.input
+    out = args.output[0]
 
-    with open(args.s[0]) as f:
+    with open(args.sample_info[0]) as f:
         sample_info = pd.read_csv(f, sep="\t", header=0)
 
-    return inp, out, sample_info, args.v
+    return inp, out, sample_info, args.verbose
 
 
 def checkpoint(inp, sample_info, verbose):
