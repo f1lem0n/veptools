@@ -163,3 +163,4 @@ cython_debug/
 
 veptools-build/
 tests/output/
+sha256tmp
